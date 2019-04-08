@@ -1,0 +1,63 @@
+.App{
+  text-align: center;
+  height: 1000px;
+  background-image: url('./images/fifa-manager-bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.App-logo{
+  /* animation: App-logo-spin infinite 20s linear; */
+  height: 100px;
+}
+
+.App-header{
+  background-color: #222;
+  /* height: 200px; */
+  height: 20%;
+  padding: 20px;
+  color: white;
+}
+
+.App-title{
+  font-size: 1.5em;
+}
+
+.App-intro{
+  font-size: large;
+}
+
+/* @keyframes App-logo-spin{
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+} */
+
+
+/* Smartphone grandi dimensioni */
+@media (min-width: 481px) {
+  .App{
+    height: 481px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .App{
+    height: 768px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  .App{
+    height: 992px;
+  }
+}
+
+/* Grandi Desktop */
+@media (min-width: 1200px) {
+  .App{
+    height: 100%;
+  }
+}

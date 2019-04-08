@@ -1,0 +1,135 @@
+ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+li{
+    margin: 4%;
+    padding: 2%;
+    /* box-shadow: 0 2px 2px #373834; */
+}
+
+li a{
+    color: #b3b3b3;
+}
+
+li a:hover{
+    color: #e6e6e6;
+}
+
+.navbar{
+    box-shadow: 0 1px 3px #4f4f4f;
+}
+
+.header-logo{
+    height: 100px;
+}
+
+.header-title{
+    font-size: 1.5em;
+}
+
+.navbar{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.navbar-logo{
+    height: 35px;
+    width: 35px;
+}
+
+.navbar-brand{
+    margin-right: 0.5%;
+    cursor: pointer;
+}
+
+.sideNavMenu{
+    position: fixed;
+    height: 100%;
+    z-index: 1050;
+    font-size: 20px;
+    box-shadow: 1px 0 2px #4f4f4f;
+}
+
+.sideNavMenuClosed{
+    left: -100px;
+}
+
+.sideNavMenuOpened{
+    left: 0;
+}
+
+.backdropStyle{
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.user-image{
+    height: 100px;
+    width: 100px;
+}
+
+.user-section{
+    margin-bottom: 5%;
+    background-color: #373834;
+    box-shadow: 0 3px 2px #373834;
+    padding: 4%;
+    color: white;
+    font-weight: 450;
+}
+
+.li-footer{
+    color: #b3b3b3;
+    position: absolute;
+    bottom: 0;
+}
+
+.signature{
+    font-size: 12px;
+    font-style: italic;
+    color: #808080;
+    margin-top: 0.5%;
+    margin-bottom: 0;
+}
+
+/* Smartphone XS screen */
+@media (min-width: 300px){
+    .sideNavMenu{
+        width: 70%;
+    }
+}
+
+/* Smartphone screen */
+@media (min-width: 350px){
+    .sideNavMenu{
+        width: 70%;
+    }
+}
+
+/* Smartphone XL screen */
+@media (min-width: 481px){
+    .sideNavMenu{
+        width: 40%;
+    }
+}
+
+/* Tablet sreen */
+@media (min-width: 768px){
+    .sideNavMenu{
+        width: 30%;
+    }
+}
+
+/* Desktop screen */
+@media (min-width: 992px){
+    .sideNavMenu{
+        width: 25%;
+    }
+}
+
+/* XL screen*/
+@media (min-width: 1200px){
+    .sideNavMenu{
+        width: 20%;
+    }
+}

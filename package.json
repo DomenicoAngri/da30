@@ -1,0 +1,33 @@
+{
+  "name": "fifa-manager-backend",
+  "version": "0.9.0",
+  "description": "Fifa manager italian tournament web app.",
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt": "^3.0.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "jwt-simple": "^0.5.1",
+    "moment": "^2.22.2",
+    "mongoose": "^5.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js", 
+    "heroku-postbuild": "cd frontend && npm install --only=dev && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DomenicoAngri/fifa-manager.git"
+  },
+  "author": "Domenico Angri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DomenicoAngri/fifa-manager/issues"
+  },
+  "homepage": "https://github.com/DomenicoAngri/fifa-manager#readme"
+}
