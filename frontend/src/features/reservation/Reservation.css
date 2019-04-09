@@ -1,0 +1,25 @@
+.superText{
+    font-weight: bold;
+    font-size: 120px;
+    text-shadow: 0 0 200px white;
+}
+
+.elegantCursiveFont{
+    font-family: 'Tangerine', cursive;
+    font-size: 30px;
+}
+
+.hr-style-bg{
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ffffff4d;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.btn-secondary{
+    box-shadow: 1px 1px 3px #ffffff4d;
+}

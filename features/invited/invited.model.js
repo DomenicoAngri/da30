@@ -40,6 +40,16 @@ const invitedSchema = new mongoose.Schema({
         maxlength: 50,
         unique: false,
         required: false
+    },
+    isAlreadyRegistered: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 

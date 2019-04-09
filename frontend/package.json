@@ -1,6 +1,7 @@
 {
-  "name": "fifa-manager-frontend",
-  "version": "0.9.0",
+  "name": "DA30",
+  "version": "0.0.1",
+  "description": "Web app for DA30 event invited reservation.",
   "private": true,
   "proxy": "http://localhost:7100",
   "dependencies": {

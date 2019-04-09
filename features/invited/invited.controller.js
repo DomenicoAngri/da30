@@ -34,7 +34,7 @@ function invitedController(){
                 return;
             }
             else{
-                log.warn('Code ' + code + 'not found! User is not invited.');
+                log.warn('Code ' + code + ' not found! User is not invited.');
                 response.status(404).send(new responseMessage('WARN_900', 'Invited code not found! User is not invited.'));
 
                 log.info('Response with code 404 sent. Ended method checkInvitedByCode.');
@@ -53,7 +53,7 @@ function invitedController(){
     }
 
     function setReservation(request, response){
-        log.info('invitedController - setIfInvitedWillCome --> Start function.');
+        log.info('invitedController - setReservation --> Start function.');
 
         // Invited code and (if is present) partner name.
         const code = request.body.code;
@@ -62,14 +62,14 @@ function invitedController(){
         log.debug('Invited partner = ' + partner);
 
         log.info('Setting user with code = ' + code + ', will come.');
-        helper.setIfInvitedWillCome(code, partner)
+        helper.setReservation(code, partner)
         .then(function(invitedUpdated){
             log.info('Invited with code = ' + code + ' setted to will come!');
             log.debug(invitedUpdated);
 
             response.status(200).send(new responseMessage(invitedUpdated));
 
-            log.info('Response with invited and code 200 sent. Ended method setIfInvitedWillCome.');
+            log.info('Response with invited and code 200 sent. Ended method setReservation.');
             return;
         })
         .catch(function(error){
@@ -78,11 +78,11 @@ function invitedController(){
 
             response.status(500).send(new responseMessage('FAT_901', 'Fatal error on setting invited with code ' + code + ', will come.'));
 
-            log.info('Response with code 500 sent. Ended method setIfInvitedWillCome.');
+            log.info('Response with code 500 sent. Ended method setReservation.');
             return;
         });
     }
-
+    
 }
 
 module.exports = new invitedController();
