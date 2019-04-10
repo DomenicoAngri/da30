@@ -23,3 +23,11 @@
 .btn-secondary{
     box-shadow: 1px 1px 3px #ffffff4d;
 }
+
+.no-padding{
+    padding: 0;
+}
+
+.with-margin{
+    margin-top: 1%;
+}

@@ -13,7 +13,8 @@ class Reservation extends Component{
         isStepTwoSetReservation: false,
         isStepThreeThankYouPage: false,
         isInvitedAlreadyRegistered: false,
-        personalCodeInvalid: false
+        personalCodeInvalid: false,
+        isSubmitDisabled: true
     };
 
     checkInvited = (event) => {
@@ -23,7 +24,7 @@ class Reservation extends Component{
         const checkInvitedUrl = '/api/invited/checkInvited';
         const checkInvitedBody = {
             code: invitedCode
-        }; 
+        };
 
         request.post(checkInvitedUrl, checkInvitedBody)
         .then((result) => {
@@ -51,6 +52,19 @@ class Reservation extends Component{
         });
     }
 
+    enableSubmit = (event) => {
+        if(event.target.checked){
+            this.setState({
+                isSubmitDisabled: false
+            });
+        }
+        else{
+            this.setState({
+                isSubmitDisabled: true
+            });
+        }
+    }
+
     render(){
         const HeaderComponent =
             <Auxiliary>
@@ -68,7 +82,7 @@ class Reservation extends Component{
 
         const stepOneInsertPersonalCode =
             <div className="row">
-                <div className="col-lg-6 offset-lg-3 col-12">
+                <div className="col-md-6 offset-md-3 col-12">
                     <form onSubmit={(event) => this.checkInvited(event)}>
                         <div className="form-group">
                             <label htmlFor="personalCode">Please insert your personal invitation code:</label>
@@ -81,8 +95,42 @@ class Reservation extends Component{
                 </div>
             </div>;
 
-        const stepTwoSetReservation = <p>Ciao siamo allo step 2!</p>;
+        const stepTwoSetReservation =
+            <Auxiliary>
+                <div className="row">
+                    <div className="col-md-8 offset-md-2 col-12">
+                        Hi <strong>{this.state.name} {this.state.surname}</strong>, you are official invited to DA30: the Domenico's 30 event birthday!
+                        <br/>
+                        This invitation is exclsively for you, please reply if you will be present to the event.
+                        <br/>
+                        If you will be accompanied by a partner, please specify it's name and surname. Thank you!
+                        <br/>
+                    </div>
+                </div>
 
+                <br/>
+
+                <div className="row">
+                    <div className="col-md-8 offset-md-2 col-12">
+                        <form>
+                            <div className="form-group">
+                                <div className="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck" onChange={(event) => this.enableSubmit(event)}/>
+                                    <label class="form-check-label" for="gridCheck">I will be present at the event!</label>
+                                </div>
+                                
+                                <div className="col-md-6 col-12 no-padding with-margin">
+                                    <input id="partnerName" type="text" className="form-control" placeholder="Partner name"/>
+                                    {this.state.personalCodeInvalid ? <div className="invalid-feedback">Invitation code invalid! Please check it.</div> : ""}
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-secondary" disabled={this.state.isSubmitDisabled}>Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </Auxiliary>;
+            
         const stepThreeThankYouPage = null;
 
         const invitedAlreadyRegistered = null;
