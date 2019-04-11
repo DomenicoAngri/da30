@@ -8,7 +8,7 @@ function invitedHelper(){
     let invitedHelper = this;
 
     invitedHelper.getInvitedByCode = getInvitedByCode;
-    invitedHelper.setReservation = setReservation;
+    invitedHelper.updateReservation = updateReservation;
 
     return invitedHelper;
 
@@ -24,11 +24,15 @@ function invitedHelper(){
         });
     }
 
-    function setReservation(code, partner){
+    function updateReservation(code, partner, willCome, isAlreadyRegistered){
         return new Promise(function(resolve, reject){
             invitedModel.updateOne(
                 {code: code},
-                {partner: partner, willCome: true},
+                {
+                    partner: partner,
+                    willCome: willCome,
+                    isAlreadyRegistered: isAlreadyRegistered
+                },
                 {new: true}
             )
             .then(function(invitedUpdated){

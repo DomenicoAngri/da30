@@ -11,6 +11,7 @@ function invitedController(){
 
     invitedController.checkInvitedByCode = checkInvitedByCode;
     invitedController.setReservation = setReservation;
+    invitedController.unregistration = unregistration;
 
     return invitedController;
 
@@ -62,12 +63,12 @@ function invitedController(){
         log.debug('Invited partner = ' + partner);
 
         log.info('Setting user with code = ' + code + ', will come.');
-        helper.setReservation(code, partner)
+        helper.updateReservation(code, partner, true, true)
         .then(function(invitedUpdated){
             log.info('Invited with code = ' + code + ' setted to will come!');
             log.debug(invitedUpdated);
 
-            response.status(200).send(new responseMessage(invitedUpdated));
+            response.status(200).send(new responseMessage('INFO', 'Good! Invited with code ' + code + ' is registered!'));
 
             log.info('Response with invited and code 200 sent. Ended method setReservation.');
             return;
@@ -79,6 +80,65 @@ function invitedController(){
             response.status(500).send(new responseMessage('FAT_901', 'Fatal error on setting invited with code ' + code + ', will come.'));
 
             log.info('Response with code 500 sent. Ended method setReservation.');
+            return;
+        });
+    }
+
+    function unregistration(request, response){
+        log.info('invitedController - unregistration --> Start function.');
+
+        // Invited code for unregistration.
+        const code = request.body.code;
+        log.debug('Invited code = ' + code);
+
+        log.info('Setting user with code = ' + code + ', will not available anymore.');
+        helper.updateReservation(code, '', false, false)
+        .then(function(invitedUpdated){
+            log.info('Invited with code = ' + code + ' setted will not available anymore.!');
+            log.debug(invitedUpdated);
+
+            response.status(200).send(new responseMessage('INFO', 'Setted invited with code ' + code + ' will not available anymore.'));
+
+            log.info('Response with invited and code 200 sent. Ended method unregistration.');
+            return;
+        })
+        .catch(function(error){
+            log.error('FAT_901 --> Fatal error on setting invited with code ' + code + ', will not available anymore.');
+            log.error(error);
+
+            response.status(500).send(new responseMessage('FAT_901', 'Fatal error on setting invited with code ' + code + ', will not available anymore.'));
+
+            log.info('Response with code 500 sent. Ended method unregistration.');
+            return;
+        });
+    }
+
+    function updatePartner(request, response){
+        log.info('invitedController - updatePartner --> Start function.');
+
+        // Invited code for unregistration.
+        const code = request.body.code;
+        const partner = request.body.partner
+        log.debug('Invited code = ' + code);
+
+        log.info('Setting user with code = ' + code + ', will not available anymore.');
+        helper.updateReservation(code, '', false, false)
+        .then(function(invitedUpdated){
+            log.info('Invited with code = ' + code + ' setted will not available anymore.!');
+            log.debug(invitedUpdated);
+
+            response.status(200).send(new responseMessage('INFO', 'Setted invited with code ' + code + ' will not available anymore.'));
+
+            log.info('Response with invited and code 200 sent. Ended method unregistration.');
+            return;
+        })
+        .catch(function(error){
+            log.error('FAT_901 --> Fatal error on setting invited with code ' + code + ', will not available anymore.');
+            log.error(error);
+
+            response.status(500).send(new responseMessage('FAT_901', 'Fatal error on setting invited with code ' + code + ', will not available anymore.'));
+
+            log.info('Response with code 500 sent. Ended method unregistration.');
             return;
         });
     }

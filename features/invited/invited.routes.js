@@ -19,6 +19,10 @@ router.post('/setReservation',
         invitedController.setReservation
 );
 
+router.post('/unregistration',
+        invitedController.unregistration
+);
+
 // Get all invited
 
 module.exports = router;
