@@ -1,49 +1,6 @@
 html, body{
-    height: 100%;
-    color: white;
-}
-
-a, a:hover{
-    text-decoration: none;
-}
-
-.container-fluid{
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    overflow: auto;
-}
-
-.row{
-    padding: 0;
-    margin: 0;
-}
-
-.background-image{
-    position: fixed;
-    background-image: url(../../assets/images/fifa-manager-bg.jpg);
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    top: 0;
-    left: 0;
-}
-
-.background-image::before{
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    content: "";
-    background-color: rgba(84, 110, 122, 0.9);
-}
-
-.dark-bg{
     background-color: #303030;
+    color: white;
 }
 
 .fix-bug-radius-corner-input-group-bs4{

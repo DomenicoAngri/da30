@@ -1,0 +1,45 @@
+.super-text{
+    font-weight: bold;
+    font-size: 120px;
+    text-shadow: 0 0 200px white;
+}
+
+.elegant-cursive-font{
+    font-family: 'Tangerine', cursive;
+    font-size: 30px;
+}
+
+.hr-style-bg{
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ffffff4d;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.btn-secondary{
+    box-shadow: 1px 1px 3px #ffffff4d;
+}
+
+.no-padding{
+    padding: 0;
+}
+
+.with-margin{
+    margin-top: 1%;
+}
+
+.thank-you-font{
+    font-size: 60px;
+}
+
+.signature{
+    font-size: 12px;
+    font-style: italic;
+    color: #808080;
+    margin-top: 0.5%;
+    margin-bottom: 0;
+}
