@@ -9,6 +9,7 @@ function invitedHelper(){
 
     invitedHelper.getInvitedByCode = getInvitedByCode;
     invitedHelper.updateReservation = updateReservation;
+    invitedHelper.createInvitedsList = createInvitedsList;
 
     return invitedHelper;
 
@@ -37,6 +38,18 @@ function invitedHelper(){
             )
             .then(function(invitedUpdated){
                 resolve(invitedUpdated);
+            })
+            .catch(function(error){
+                reject(error);
+            });
+        });
+    }
+
+    function createInvitedsList(inviteds){
+        return new Promise(function(resolve, reject){
+            invitedModel.insertMany(inviteds)
+            .then(function(invitedsSaved){
+                resolve(invitedsSaved);
             })
             .catch(function(error){
                 reject(error);

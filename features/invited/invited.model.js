@@ -38,6 +38,7 @@ const invitedSchema = new mongoose.Schema({
         type: String,
         minlength: 3,
         maxlength: 50,
+        match: /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
         unique: false,
         required: false
     },

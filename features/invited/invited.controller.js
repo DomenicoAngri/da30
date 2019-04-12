@@ -12,6 +12,7 @@ function invitedController(){
     invitedController.checkInvitedByCode = checkInvitedByCode;
     invitedController.setReservation = setReservation;
     invitedController.unregistration = unregistration;
+    invitedController.createInvitedsList = createInvitedsList;
 
     return invitedController;
 
@@ -113,32 +114,31 @@ function invitedController(){
         });
     }
 
-    function updatePartner(request, response){
-        log.info('invitedController - updatePartner --> Start function.');
+    function createInvitedsList(request, response){
+        log.info('invitedController - createInvitedsList --> Start function.');
 
-        // Invited code for unregistration.
-        const code = request.body.code;
-        const partner = request.body.partner
-        log.debug('Invited code = ' + code);
+        const invitedsList = request.body.invitedsList;
+        log.debug('Inviteds list:');
+        log.debug(invitedsList);
 
-        log.info('Setting user with code = ' + code + ', will not available anymore.');
-        helper.updateReservation(code, '', false, false)
-        .then(function(invitedUpdated){
-            log.info('Invited with code = ' + code + ' setted will not available anymore.!');
-            log.debug(invitedUpdated);
+        log.info('Inserting inviteds list...');
+        helper.createInvitedsList(invitedsList)
+        .then(function(inviteds){
+            log.info(inviteds.length + ' inviteds inserted correctly!');
+            log.debug(inviteds);
 
-            response.status(200).send(new responseMessage('INFO', 'Setted invited with code ' + code + ' will not available anymore.'));
+            response.status(200).send(new responseMessage('INFO', inviteds.length + ' inviteds inserted correctly!'));
 
-            log.info('Response with invited and code 200 sent. Ended method unregistration.');
+            log.info('Response with code 200. Ended method createInvitedsList.');
             return;
         })
         .catch(function(error){
-            log.error('FAT_901 --> Fatal error on setting invited with code ' + code + ', will not available anymore.');
+            log.error('FAT_902 --> A server error occurred while inserting inviteds list.');
             log.error(error);
 
-            response.status(500).send(new responseMessage('FAT_901', 'Fatal error on setting invited with code ' + code + ', will not available anymore.'));
+            response.status(500).send(new responseMessage('FAT_902', 'A server error occurred while inserting inviteds list.'));
 
-            log.info('Response with code 500 sent. Ended method unregistration.');
+            log.info('Response with code 200. Ended method createInvitedsList.');
             return;
         });
     }

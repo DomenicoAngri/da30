@@ -4,6 +4,7 @@
 
  // Requirements.
 const express = require('express');
+const invitedMiddleware = require('./invited.middleware');
 const invitedController = require('./invited.controller');
 
 // Initialize.
@@ -15,12 +16,18 @@ router.post('/checkInvited',
         invitedController.checkInvitedByCode
 );
 
-router.post('/setReservation',
+router.put('/setReservation',
+        invitedMiddleware.checkInvitedCodeExists,
         invitedController.setReservation
 );
 
-router.post('/unregistration',
+router.put('/unregistration',
+        invitedMiddleware.checkInvitedCodeExists,
         invitedController.unregistration
+);
+
+router.post('/createInvitedList',
+        invitedController.createInvitedsList
 );
 
 // Get all invited

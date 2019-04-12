@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import request from 'axios';
 
 import './Reservation.css';
 
-// Mettere anche in model BE controllo
-// Proteggere metodi da chiamate esterne
-// Trasformare tutto in react app no redux
-// Mettere controllo su partner
-// Errore in caso di server o DB giù
-// Mettere delle chicche e/o parole chiavi
+// TODO - Mettere delle chicche e/o parole chiavi
 
 class Reservation extends Component{
     state = {
@@ -25,9 +19,12 @@ class Reservation extends Component{
         isThankYouPageUpdated: false,
         personalCodeInvalid: false,
         personalCodeNullOrBlank: false,
+        partnerNameLimitlengthExceded: false,
+        partnerNameSpecialCharacterError: false,
         isSubmitDisabled: true,
         isSubmitPartnerDisabled: false,
-        isPartnerInputUpdatedNullOrBlank: false
+        isPartnerInputUpdatedNullOrBlank: false,
+        isErrorPage: false
     };
 
     checkInvited = (event) => {
@@ -83,6 +80,11 @@ class Reservation extends Component{
     }
 
     enableSubmit = (event) => {
+        this.setState({
+            partnerNameLimitlengthExceded: false,
+            partnerNameSpecialCharacterError: false,
+        });
+
         if(event.target.checked){
             this.setState({
                 isSubmitDisabled: false
@@ -97,7 +99,9 @@ class Reservation extends Component{
 
     enablePartnerSubmit = (event) => {
         this.setState({
-            isPartnerInputUpdatedNullOrBlank: false
+            isPartnerInputUpdatedNullOrBlank: false,
+            partnerNameLimitlengthExceded: false,
+            partnerNameSpecialCharacterError: false,
         });
 
         if(event.target.checked){
@@ -115,8 +119,42 @@ class Reservation extends Component{
     submitRegistration = (event) => {
         event.preventDefault();
 
+        this.setState({
+            partnerNameLimitlengthExceded: false,
+            partnerNameSpecialCharacterError: false
+        });
+
         const invitedCode = this.state.invitedCode;
         const invitedPartner = event.target.partnerName.value;
+
+        if(invitedPartner){
+            // Particular names:
+            // Mathias d'Arras
+            // Martin Luther King, Jr.
+            // Hector Sausage-Hausen
+
+            // Regex support international names:
+            // Warning: unicode feature may not be supported in all browsers!
+            const personUnicodeRegex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+            
+            // Simple regex names:
+            // const personRegex = /^[a-z ,.'-]+$/i;
+
+            if(invitedPartner.length > 50){
+                this.setState({
+                    partnerNameLimitlengthExceded: true
+                });
+
+                return;
+            }
+            else if(!personUnicodeRegex.test(invitedPartner)){
+                this.setState({
+                    partnerNameSpecialCharacterError: true
+                });
+
+                return;
+            }
+        }
 
         const submitRegistrationUrl = '/api/invited/setReservation';
         const submitRegistrationBody = {
@@ -124,7 +162,7 @@ class Reservation extends Component{
             partner: invitedPartner
         };
 
-        request.post(submitRegistrationUrl, submitRegistrationBody)
+        request.put(submitRegistrationUrl, submitRegistrationBody)
         .then((result) => {
             this.setState({
                 isStepTwoSetReservation: false,
@@ -132,8 +170,8 @@ class Reservation extends Component{
             });
         })
         .catch((error) => {
-            // TODO - Gestire errore
             console.log(error);
+            this.setErrorPage();
         });
     }
 
@@ -147,7 +185,7 @@ class Reservation extends Component{
             code: invitedCode
         };
 
-        request.post(submitUnregistrationUrl, submitUnregistrationBody)
+        request.put(submitUnregistrationUrl, submitUnregistrationBody)
         .then((result) => {
             this.setState({
                 isInvitedAlreadyRegistered: false,
@@ -155,8 +193,8 @@ class Reservation extends Component{
             });
         })
         .catch((error) => {
-            // TODO - Gestire errore
             console.log(error);
+            this.setErrorPage();
         });
     }
 
@@ -164,6 +202,8 @@ class Reservation extends Component{
         event.preventDefault();
 
         this.setState({
+            partnerNameLimitlengthExceded: false,
+            partnerNameSpecialCharacterError: false,
             isPartnerInputUpdatedNullOrBlank: false
         });
 
@@ -177,7 +217,7 @@ class Reservation extends Component{
                 partner: ''
             };
 
-            request.post(submitRegistrationUrl, submitRegistrationBody)
+            request.put(submitRegistrationUrl, submitRegistrationBody)
             .then((result) => {
                 this.setState({
                     isThankYouPageUpdated: true,
@@ -185,29 +225,43 @@ class Reservation extends Component{
                 });
             })
             .catch((error) => {
-                // TODO - Gestire errore
                 console.log(error);
+                this.setErrorPage();
             });
         }
         else{
             if(partner){
-                const submitRegistrationUrl = '/api/invited/setReservation';
-                const submitRegistrationBody = {
-                    code: this.state.invitedCode,
-                    partner: partner
-                };
+                const personUnicodeRegex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
 
-                request.post(submitRegistrationUrl, submitRegistrationBody)
-                .then((result) => {
+                if(partner.length > 50){
                     this.setState({
-                        isThankYouPageUpdated: true,
-                        isInvitedAlreadyRegistered: false
+                        partnerNameLimitlengthExceded: true
                     });
-                })
-                .catch((error) => {
-                    // TODO - Gestire errore
-                    console.log(error);
-                });
+                }
+                else if(!personUnicodeRegex.test(partner)){
+                    this.setState({
+                        partnerNameSpecialCharacterError: true
+                    });
+                }
+                else{
+                    const submitRegistrationUrl = '/api/invited/setReservation';
+                    const submitRegistrationBody = {
+                        code: this.state.invitedCode,
+                        partner: partner
+                    };
+
+                    request.put(submitRegistrationUrl, submitRegistrationBody)
+                    .then((result) => {
+                        this.setState({
+                            isThankYouPageUpdated: true,
+                            isInvitedAlreadyRegistered: false
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.setErrorPage();
+                    });
+                }
             }
             else{
                 this.setState({
@@ -215,6 +269,18 @@ class Reservation extends Component{
                 });
             }
         }
+    }
+
+    setErrorPage = () => {
+        this.setState({
+            isStepOneInsertPersonalCode: false,
+            isStepTwoSetReservation: false,
+            isStepThreeThankYouPageRegistration: false,
+            isInvitedAlreadyRegistered: false,
+            isThankYouPageUnregistration: false,
+            isThankYouPageUpdated: false,
+            isErrorPage: true
+        });
     }
 
     render(){
@@ -262,10 +328,10 @@ class Reservation extends Component{
                         <p>
                         If you will be accompanied by a partner, please specify it's name and surname. Thank you!
                         </p>
+
+                        <hr className="hr-style-bg"/>
                     </div>
                 </div>
-
-                <hr className="hr-style-bg"/>
 
                 <div className="row">
                     <div className="col-md-8 offset-md-2 col-12">
@@ -277,13 +343,16 @@ class Reservation extends Component{
                                 </div>
                                 
                                 <div className="col-md-6 col-12 no-padding with-margin">
-                                    <input id="partnerName" type="text" className="form-control" placeholder="Partner name and surname"/>
-                                    {/* {this.state.personalCodeInvalid ? <div className="invalid-feedback">Invitation code invalid! Please check it.</div> : ""} */}
+                                    <input id="partnerName" type="text" className={"form-control " + (this.state.partnerNameLimitlengthExceded || this.state.partnerNameSpecialCharacterError ? "is-invalid" : "")} placeholder="Partner name and surname"/>
+                                    {this.state.partnerNameLimitlengthExceded ? <div className="invalid-feedback">Name can have max 50 characters!</div> : ""}
+                                    {this.state.partnerNameSpecialCharacterError ? <div className="invalid-feedback">Name cannot have special characters!</div> : ""}
                                 </div>
                             </div>
 
                             <button type="submit" className="btn btn-secondary" disabled={this.state.isSubmitDisabled}>Submit</button>
                         </form>
+
+                        <hr className="hr-style-bg"/>
                     </div>
                 </div>
             </Auxiliary>;
@@ -305,10 +374,10 @@ class Reservation extends Component{
                     <div className="col-md-6 offset-md-3 col-12">
                         <p>Hi <strong>{this.state.name}</strong>, you are already registered for DA30's event.</p>
                         <p>In these days insert your code, and check to discover the secret location!</p>
+
+                        <hr className="hr-style-bg"/>
                     </div>
                 </div>
-
-                <hr className="hr-style-bg"/>
 
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-12">
@@ -322,21 +391,25 @@ class Reservation extends Component{
                                 </div>
                                 
                                 <div className="col-md-6 col-12 no-padding with-margin">
-                                    <input id="partnerName" type="text" className={"form-control " + (this.state.isPartnerInputUpdatedNullOrBlank ? "is-invalid" : "")} placeholder="Partner name and surname" disabled={this.state.isSubmitPartnerDisabled}/>
+                                    <input id="partnerName" type="text" className={"form-control " + (this.state.partnerNameLimitlengthExceded || this.state.partnerNameSpecialCharacterError || this.state.isPartnerInputUpdatedNullOrBlank ? "is-invalid" : "")} placeholder="Partner name and surname" disabled={this.state.isSubmitPartnerDisabled}/>
                                     {this.state.isPartnerInputUpdatedNullOrBlank ? <div className="invalid-feedback">Partner name cannot be blank!</div> : ""}
+                                    {this.state.partnerNameLimitlengthExceded ? <div className="invalid-feedback">Name can have max 50 characters!</div> : ""}
+                                    {this.state.partnerNameSpecialCharacterError ? <div className="invalid-feedback">Name cannot have special characters!</div> : ""}
                                 </div>
                             </div>
                             <button type="submit" className="btn btn-secondary">Submit</button>
                         </form>
+
+                        <hr className="hr-style-bg"/>
                     </div>
                 </div>
-
-                <hr className="hr-style-bg"/>
 
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-12">
                         <p>If you cannot participate anymore, please click the button below, thanks.</p>
                         <button type="button" className="btn btn-secondary" onClick={(event) => this.submitUnregistration(event)}>I cannot participate anymore :(</button>
+                        
+                        <hr className="hr-style-bg"/>
                     </div>
                 </div>
             </Auxiliary>;
@@ -362,9 +435,20 @@ class Reservation extends Component{
                 </div>
             </div>;
 
+        const errorPage =
+            <div className="row thank-you-font">
+                <div className="col-12">
+                    <strong>
+                        <p>ERRORE 666!</p>
+                        <p>STA PER SCOPPIARE IL SERVER: FUGGITE, SCIOCCHI!</p>
+                        <p>RICARICARE LA PAGINA.</p>
+                    </strong>
+                </div>
+            </div>;         
+
         return(
             <Auxiliary> 
-                {HeaderComponent}
+                {this.state.isErrorPage ? errorPage : HeaderComponent}
 
                 {this.state.isStepOneInsertPersonalCode ? stepOneInsertPersonalCode : null}
 
@@ -382,16 +466,4 @@ class Reservation extends Component{
     }
 }
 
-const mapStateToProps = state => {
-    return{
-
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return{
-
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Reservation);
+export default Reservation;
