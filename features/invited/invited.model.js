@@ -17,7 +17,6 @@ const invitedSchema = new mongoose.Schema({
         type: String,
         minlength: 3,
         maxlength: 50,
-        lowercase: true,
         unique: false,
         required: true
     },
@@ -25,7 +24,6 @@ const invitedSchema = new mongoose.Schema({
         type: String,
         minlength: 3,
         maxlength: 50,
-        lowercase: true,
         unique: false,
         required: true
     },
