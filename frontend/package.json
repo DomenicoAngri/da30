@@ -1,6 +1,6 @@
 {
   "name": "DA30",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Web app for DA30 event invited reservation.",
   "private": true,
   "proxy": "http://localhost:7100",

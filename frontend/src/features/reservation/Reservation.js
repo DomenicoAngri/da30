@@ -4,8 +4,6 @@ import request from 'axios';
 
 import './Reservation.css';
 
-// TODO - Mettere delle chicche e/o parole chiavi
-
 class Reservation extends Component{
     state = {
         name: '',
