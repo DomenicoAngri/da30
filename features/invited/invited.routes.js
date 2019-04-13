@@ -26,9 +26,10 @@ router.put('/unregistration',
         invitedController.unregistration
 );
 
-router.post('/createInvitedList',
-        invitedController.createInvitedsList
-);
+// Comment this services for production.
+// router.post('/createInvitedList',
+//         invitedController.createInvitedsList
+// );
 
 // Get all invited
 
