@@ -26,10 +26,14 @@ router.put('/unregistration',
         invitedController.unregistration
 );
 
-router.post('/createInvitedList',
-        invitedController.createInvitedsList
+router.get('/getAllInvitedsWillCome/:code',
+        invitedMiddleware.checkIsAdmin,
+        invitedController.getAllInvitedsWillCome
 );
 
-// Get all invited
+// Comment this services for production.
+// router.post('/createInvitedList',
+//         invitedController.createInvitedsList
+// );
 
 module.exports = router;
