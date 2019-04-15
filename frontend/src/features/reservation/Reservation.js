@@ -22,12 +22,15 @@ class Reservation extends Component{
         isSubmitDisabled: true,
         isSubmitPartnerDisabled: false,
         isPartnerInputUpdatedNullOrBlank: false,
-        isErrorPage: false
+        isErrorPage: false,
+        isAdmin: false,
+        invitedsWillComeList: null
     };
 
     checkInvited = (event) => {
         event.preventDefault();
 
+        // If there are errors, set them to null.
         this.setState({
             personalCodeInvalid: false,
             personalCodeNullOrBlank: false
@@ -49,7 +52,23 @@ class Reservation extends Component{
 
         request.post(checkInvitedUrl, checkInvitedBody)
         .then((result) => {
-            if(result.data.isAlreadyRegistered){
+            if(result.data.isAdmin){
+                const getAllInvitedsWillComeUrl = '/api/invited/getAllInvitedsWillCome/' + invitedCode;
+
+                request.get(getAllInvitedsWillComeUrl)
+                .then((invitedsWillComeResultList) => {
+                    this.setState({
+                        invitedsWillComeList: invitedsWillComeResultList.data,
+                        isStepOneInsertPersonalCode: false,
+                        isAdmin: true
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.setErrorPage();
+                });
+            }
+            else if(result.data.isAlreadyRegistered){
                 this.setState({
                     name: result.data.name,
                     surname: result.data.surname,
@@ -442,11 +461,48 @@ class Reservation extends Component{
                         <p>RICARICARE LA PAGINA.</p>
                     </strong>
                 </div>
-            </div>;         
+            </div>;
+
+        const adminPage =
+            <div className="row">
+                <div className="col-12">
+                    {this.state.invitedsWillComeList && this.state.invitedsWillComeList.length > 0 ?
+                        <Auxiliary>
+                            <p>
+                                <strong>
+                                    Inviteds that will come to the party:
+                                </strong>
+                            </p>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Invited</th>
+                                        <th>Partner</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {this.state.invitedsWillComeList.map((invited, index) =>
+                                        <tr key={index}>
+                                            <td>{invited.name} {invited.surname}</td>
+                                            <td>{invited.partner}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+
+                        </Auxiliary>                        
+                        :
+                        <p>Nobody inviteds will come to the party!</p>
+                    }
+                </div>
+            </div>;
 
         return(
             <Auxiliary> 
-                {this.state.isErrorPage ? errorPage : HeaderComponent}
+                {this.state.isErrorPage ? errorPage : null}
+
+                {this.state.isAdmin ? adminPage : HeaderComponent}
 
                 {this.state.isStepOneInsertPersonalCode ? stepOneInsertPersonalCode : null}
 

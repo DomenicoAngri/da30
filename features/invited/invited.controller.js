@@ -13,6 +13,7 @@ function invitedController(){
     invitedController.setReservation = setReservation;
     invitedController.unregistration = unregistration;
     invitedController.createInvitedsList = createInvitedsList;
+    invitedController.getAllInvitedsWillCome = getAllInvitedsWillCome;
 
     return invitedController;
 
@@ -138,7 +139,42 @@ function invitedController(){
 
             response.status(500).send(new responseMessage('FAT_902', 'A server error occurred while inserting inviteds list.'));
 
-            log.info('Response with code 200. Ended method createInvitedsList.');
+            log.info('Response with code 500. Ended method createInvitedsList.');
+            return;
+        });
+    }
+
+    function getAllInvitedsWillCome(request, response){
+        log.info('invitedController - getAllInvitedsWillCome --> Start function.');
+
+        log.info('Getting inviteds will come...');
+        helper.getAllInvitedsWillCome()
+        .then(function(inviteds){
+            if(inviteds){
+                log.info(inviteds.length + ' inviteds will come to the party!');
+                log.debug(inviteds);
+
+                response.status(200).send(inviteds);
+
+                log.info('Response with code 200. Ended method getAllInvitedsWillCome.');
+                return;
+            }
+            else{
+                log.info('Nobody inviteds will come to the party.');
+
+                response.status(200).send(new responseMessage('INFO', 'Nobody inviteds will come to the party.'));
+
+                log.info('Response with code 200. Ended method getAllInvitedsWillCome.');
+                return;
+            }
+        })
+        .catch(function(error){
+            log.error('FAT_904 --> A server error occurred while getting inviteds list that will come to the party.');
+            log.error(error);
+
+            response.status(500).send(new responseMessage('FAT_904', 'A server error occurred while getting inviteds list that will come to the party.'));
+
+            log.info('Response with code 500. Ended method getAllInvitedsWillCome.');
             return;
         });
     }

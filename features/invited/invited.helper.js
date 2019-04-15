@@ -10,6 +10,7 @@ function invitedHelper(){
     invitedHelper.getInvitedByCode = getInvitedByCode;
     invitedHelper.updateReservation = updateReservation;
     invitedHelper.createInvitedsList = createInvitedsList;
+    invitedHelper.getAllInvitedsWillCome = getAllInvitedsWillCome;
 
     return invitedHelper;
 
@@ -50,6 +51,18 @@ function invitedHelper(){
             invitedModel.insertMany(inviteds)
             .then(function(invitedsSaved){
                 resolve(invitedsSaved);
+            })
+            .catch(function(error){
+                reject(error);
+            });
+        });
+    }
+
+    function getAllInvitedsWillCome(){
+        return new Promise(function(resolve, reject){
+            invitedModel.find({willCome: true})
+            .then(function(invited){
+                resolve(invited);
             })
             .catch(function(error){
                 reject(error);
